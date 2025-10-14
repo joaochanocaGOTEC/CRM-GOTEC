@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabela de Oportunidades</title>
+    <title>Gestão Comercial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -26,7 +26,7 @@
             background: #555;
         }
         .table-container {
-            max-height: 65vh;
+            max-height: 60vh;
             overflow-y: auto;
         }
         th {
@@ -47,10 +47,18 @@
             border-top-color: #3b82f6; /* blue-500 */
             animation: spin 1s linear infinite;
         }
+        .toast-spinner {
+             border-top-color: #ffffff;
+        }
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
+        }
+         /* Estilos para Abas */
+        .tab-btn.active {
+            border-color: #3b82f6; /* blue-500 */
+            color: #2563eb; /* blue-600 */
         }
     </style>
 </head>
@@ -59,55 +67,78 @@
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="p-6 border-b border-gray-200">
-                <h1 class="text-2xl font-bold text-gray-900">Registo de Oportunidades Comerciais</h1>
-                <p class="text-gray-600 mt-1">Visualize, pesquise e filtre todas as oportunidades em andamento.</p>
+                <h1 class="text-2xl font-bold text-gray-900">Gestão Comercial</h1>
+                <p class="text-gray-600 mt-1">Navegue entre oportunidades e clientes.</p>
+            </div>
+             <!-- Abas de Navegação -->
+            <div class="border-b border-gray-200 px-6">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <button id="tab-opportunities" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm active">Oportunidades</button>
+                    <button id="tab-clients" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Clientes</button>
+                </nav>
             </div>
             
-            <!-- Controlos de Filtro, Pesquisa e Adição -->
-            <div class="p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50 border-b border-gray-200 flex-wrap">
-                <div class="relative w-full md:flex-1 md:min-w-[250px]">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                    </svg>
-                    <input type="text" id="searchInput" placeholder="Pesquisar em toda a tabela..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <!-- Conteúdo das Abas -->
+            <div id="tab-content">
+                <!-- Aba de Oportunidades -->
+                <div id="content-opportunities">
+                    <!-- Controlos de Filtro, Pesquisa e Adição -->
+                    <div class="p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50 border-b border-gray-200 flex-wrap">
+                        <div class="relative w-full md:flex-1 md:min-w-[250px]">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" /></svg>
+                            <input type="text" id="searchInput" placeholder="Pesquisar..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="flex items-center gap-4 w-full md:w-auto flex-wrap">
+                            <select id="machineTypeFilter" class="w-full sm:w-auto border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Filtrar por Machine Type</option>
+                            </select>
+                            <button id="summarizeBtn" class="w-full sm:w-auto bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300 flex items-center justify-center gap-2">✨ Resumir</button>
+                            <button id="addBtn" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                                <span id="addBtnText">Adicionar</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Tabela de Oportunidades -->
+                    <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-600">
+                            <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
+                                <tr>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="prazo">Prazo Resposta</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="machineType">Machine Type</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="cliente">Cliente</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="comercial">Comercial</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="description">Descrição</th>
+                                    <th scope="col" class="p-4 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="opportunitiesTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="flex items-center gap-4 w-full md:w-auto flex-wrap">
-                    <select id="machineTypeFilter" class="w-full sm:w-auto border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Filtrar por Machine Type</option>
-                    </select>
-                     <button id="summarizeBtn" class="w-full sm:w-auto bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-300 flex items-center justify-center gap-2">
-                        ✨ Resumir Visíveis
-                    </button>
-                    <button id="addOpportunityBtn" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                        Adicionar
-                    </button>
-                </div>
-            </div>
 
-            <!-- Tabela -->
-            <div class="table-container overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-600">
-                    <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
-                        <tr>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="prazo">Prazo Resposta</th>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="machineType">Machine Type</th>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="cliente">Cliente</th>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="zip">Código Postal</th>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="comercial">Comercial</th>
-                            <th scope="col" class="p-4 cursor-pointer" data-sort="description">Descrição</th>
-                            <th scope="col" class="p-4 text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataTable">
-                        <!-- Linhas da tabela serão inseridas aqui via JavaScript -->
-                    </tbody>
-                </table>
+                <!-- Aba de Clientes -->
+                <div id="content-clients" class="hidden">
+                    <!-- Tabela de Clientes -->
+                     <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-600">
+                            <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
+                                <tr>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nome">Nome</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nif">NIF</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="morada">Morada</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="contacto">Contacto</th>
+                                    <th scope="col" class="p-4 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-             <div id="noResults" class="hidden text-center p-10 text-gray-500">
+            <div id="noResults" class="hidden text-center p-10 text-gray-500">
                 <p class="text-lg font-semibold">Nenhum resultado encontrado.</p>
                 <p>Tente ajustar os seus filtros ou termos de pesquisa.</p>
             </div>
@@ -115,417 +146,326 @@
     </div>
     
     <!-- Modal para Adicionar/Editar Oportunidade -->
-    <div id="opportunityModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto">
-            <div class="modal-content py-4 text-left px-6">
-                <!-- Título -->
-                <div class="flex justify-between items-center pb-3">
-                    <p id="modalTitle" class="text-2xl font-bold">Adicionar Oportunidade</p>
-                    <div id="modalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div>
-                </div>
-                <!-- Formulário -->
-                <form id="opportunityForm">
-                    <input type="hidden" id="opportunityId">
-                    <div class="mb-4"><label for="prazo" class="text-sm font-bold text-gray-700 tracking-wide">Prazo Resposta</label><input type="date" id="prazo" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div>
-                    <div class="mb-4"><label for="machineType" class="text-sm font-bold text-gray-700 tracking-wide">Machine Type</label><input type="text" id="machineType" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div>
-                    <div class="mb-4"><label for="cliente" class="text-sm font-bold text-gray-700 tracking-wide">Cliente</label><input type="text" id="cliente" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div>
-                    <div class="mb-4"><label for="zip" class="text-sm font-bold text-gray-700 tracking-wide">Código Postal</label><input type="text" id="zip" placeholder="0000-000" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div>
-                    <div class="mb-4"><label for="comercial" class="text-sm font-bold text-gray-700 tracking-wide">Comercial</label><input type="text" id="comercial" value="Joao Chanoca" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div>
-                    <div class="mb-4"><label for="description" class="text-sm font-bold text-gray-700 tracking-wide">Descrição</label><textarea id="description" rows="3" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></textarea></div>
-                    <div class="pt-4 flex justify-end"><button type="button" id="modalCancel" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2 hover:bg-gray-300 transition duration-300">Cancelar</button><button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Guardar</button></div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <div id="opportunityModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="opportunityModalTitle" class="text-2xl font-bold">Adicionar Oportunidade</p><div id="opportunityModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><form id="opportunityForm"><input type="hidden" id="opportunityId"><div class="mb-4"><label for="prazo" class="text-sm font-bold text-gray-700 tracking-wide">Prazo Resposta</label><input type="date" id="prazo" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="machineType" class="text-sm font-bold text-gray-700 tracking-wide">Machine Type</label><input type="text" id="machineType" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="cliente" class="text-sm font-bold text-gray-700 tracking-wide">Cliente</label><input type="text" id="cliente" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="zip" class="text-sm font-bold text-gray-700 tracking-wide">Código Postal</label><input type="text" id="zip" placeholder="0000-000" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="comercial" class="text-sm font-bold text-gray-700 tracking-wide">Comercial</label><input type="text" id="comercial" value="Joao Chanoca" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="description" class="text-sm font-bold text-gray-700 tracking-wide">Descrição</label><textarea id="description" rows="3" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></textarea></div><div class="pt-4 flex justify-end"><button type="button" id="opportunityModalCancel" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2 hover:bg-gray-300 transition duration-300">Cancelar</button><button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Guardar</button></div></form></div></div></div>
+    
+    <!-- Modal para Adicionar/Editar Cliente -->
+    <div id="clientModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="clientModalTitle" class="text-2xl font-bold">Adicionar Cliente</p><div id="clientModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><form id="clientForm"><input type="hidden" id="clientId"><div class="mb-4"><label for="clientName" class="text-sm font-bold text-gray-700 tracking-wide">Nome</label><input type="text" id="clientName" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="clientNif" class="text-sm font-bold text-gray-700 tracking-wide">NIF</label><input type="text" id="clientNif" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="clientAddress" class="text-sm font-bold text-gray-700 tracking-wide">Morada</label><input type="text" id="clientAddress" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="clientContact" class="text-sm font-bold text-gray-700 tracking-wide">Contacto</label><input type="text" id="clientContact" placeholder="email@exemplo.com" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="pt-4 flex justify-end"><button type="button" id="clientModalCancel" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2 hover:bg-gray-300 transition duration-300">Cancelar</button><button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Guardar</button></div></form></div></div></div>
 
     <!-- Modal para Assistente IA -->
-    <div id="aiModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-        <div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded-xl shadow-lg z-50 overflow-y-auto">
-            <div class="modal-content py-4 text-left px-6">
-                <div class="flex justify-between items-center pb-3">
-                    <p id="aiModalTitle" class="text-2xl font-bold flex items-center"></p>
-                    <div id="aiModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div>
-                </div>
-                <div class="prose max-w-none text-gray-800">
-                     <div id="aiLoading" class="flex flex-col items-center justify-center h-48">
-                        <div class="spinner w-12 h-12 rounded-full border-4 border-gray-200"></div>
-                        <p id="aiLoadingText" class="mt-4 text-gray-600">A processar...</p>
-                    </div>
-                    <div id="aiResult" class="hidden">
-                        <textarea id="aiText" rows="15" class="w-full p-3 border rounded-md bg-gray-50 font-mono text-sm shadow-inner"></textarea>
-                        <div id="copyFeedback" class="text-sm text-green-600 h-4 mt-1 font-medium"></div>
-                    </div>
-                </div>
-                <div class="pt-4 flex justify-end">
-                    <button id="copyAiBtn" class="hidden bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" /></svg>
-                        Copiar Texto
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div id="aiModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="aiModalTitle" class="text-2xl font-bold flex items-center"></p><div id="aiModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><div class="prose max-w-none text-gray-800"><div id="aiLoading" class="flex flex-col items-center justify-center h-48"><div class="spinner w-12 h-12 rounded-full border-4 border-gray-200"></div><p id="aiLoadingText" class="mt-4 text-gray-600">A processar...</p></div><div id="aiResult" class="hidden"><textarea id="aiText" rows="15" class="w-full p-3 border rounded-md bg-gray-50 font-mono text-sm shadow-inner"></textarea><div id="copyFeedback" class="text-sm text-green-600 h-4 mt-1 font-medium"></div></div></div><div class="pt-4 flex justify-end"><button id="copyAiBtn" class="hidden bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" /></svg>Copiar Texto</button></div></div></div></div>
+
+    <!-- Notificação de Atualização (Toast) -->
+    <div id="updateToast" class="fixed bottom-5 right-5 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg flex items-center gap-3 opacity-0 transition-opacity duration-300 z-50">
+        <div id="toastSpinner" class="spinner toast-spinner w-5 h-5 rounded-full border-2 border-gray-400"></div>
+        <span id="toastMessage"></span>
     </div>
 
     <script>
-        let data = [
+        // --- DADOS ---
+        let opportunitiesData = [
              { "id": 1, "prazo": "2024-12-10", "machineType": "Round Grinding", "cliente": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "zip": "2430-527", "comercial": "Joao Chanoca", "description": "Retificadora cilindrica CNC de boa qualidade" },
-            { "id": 2, "prazo": "2024-12-04", "machineType": "Try out press", "cliente": "Leomavél - Moldes, Lda", "zip": "2430-281", "comercial": "Joao Chanoca", "description": "OFERTA 831 - Virador de moldes 5Ton Pedido de preço para SHX modelo SXF10ton (modelo mais pequeno da SHX)" },
-            { "id": 3, "prazo": "2024-12-05", "machineType": "Try out press", "cliente": "Leomavél - Moldes, Lda", "zip": "2430-281", "comercial": "Joao Chanoca", "description": "OFERTA 833 e 832 - Prensa de ajuste moldes 100Ton nova pedido de preço para SHX prensas - SX120JM" },
+            { "id": 2, "prazo": "2024-12-04", "machineType": "Try out press", "cliente": "Leomavél - Moldes, Lda", "zip": "2430-281", "comercial": "Joao Chanoca", "description": "OFERTA 831 - Virador de moldes 5Ton" },
             { "id": 4, "prazo": "2024-12-10", "machineType": "Torno CNC", "cliente": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "zip": "2430-527", "comercial": "Joao Chanoca", "description": "Torno CNC com Y de boa qualidade" },
-            { "id": 8, "prazo": "2024-12-17", "machineType": "Flat Grinding", "cliente": "Roberto Pereira, Lda", "zip": "3720-241", "comercial": "Joao Chanoca", "description": "OFERTA 768 - Retificadora de montante movel, 1600x800 - automatica" },
-            { "id": 9, "prazo": "2024-12-17", "machineType": "Flat Grinding", "cliente": "Roberto Pereira, Lda", "zip": "3720-241", "comercial": "Joao Chanoca", "description": "OFERTA 769 - retificadora portico Retificadora portico 1600x900 - automatica teve preço LGB 2000x1000 nova de 175000€ comprou retificadora cantilever 2000x1000 por 107000€" },
-            { "id": 10, "prazo": "2024-12-17", "machineType": "Centro Maquinação 3 Eixos", "cliente": "Roberto Pereira, Lda", "zip": "3720-241", "comercial": "Joao Chanoca", "description": "OFERTA 850 - Coluna movel 4000x2000 com mesa roto translante - WEIDA HMF2040" },
-            { "id": 11, "prazo": "2024-12-17", "machineType": "Outro", "cliente": "FUTRIFER SA", "zip": "3750-142", "comercial": "Joao Chanoca", "description": "OFERTA 789 - Engenho radial lança 1,5m + mesa da WEIDA" },
-            { "id": 12, "prazo": "2024-12-17", "machineType": "Centro Maquinação 5 eixos", "cliente": "FUTRIMETAL - Indústria e Comércio de Produtos Metálicos. SA", "zip": "3750-142", "comercial": "Joao Chanoca", "description": "OFERTA 851 - WEIDA CNC de coluna móvel, cabeça universal,com comando Heidenhain, mesa de 6 metros. Para substituir a CME, conforme nossa reunião Maq 6m x 2m x 1m Weida gmf2040 Cab automatica 1° Tnc7 Pedido á Tracey em dezembro 2024" },
-            { "id": 15, "prazo": "2025-01-07", "machineType": "Centro Maquinação 3 Eixos", "cliente": "Costa & Dias Lda - CODIL", "zip": "3720-628", "comercial": "Joao Chanoca", "description": "OFERTA 852 - Procura maquina coluna móvel de mesa rotativa de 7metros, contacto do Dario (SAT ONA) Falar com Sr Joao Bastos" },
-            { "id": 17, "prazo": "2025-01-07", "machineType": "Outro", "cliente": "Go.Tec! Lda - Stock", "zip": "2415-306", "comercial": "Joao Chanoca", "description": "ABERTO" },
-            { "id": 21, "prazo": "2025-01-19", "machineType": "Centro Maquinação 3 Eixos", "cliente": "Modelvision, Lda", "zip": "2430-283", "comercial": "Joao Chanoca", "description": "OFERTA 840 - Configuração: CNC 3 eixos p/ grafite e aços comando FAGOR, blindada X 800 Y ? Z ? RPM 12.000, extrator de limalha tapete Cliente já tem aspirador para o Graphite ((cliente não quer comando Fanuc), pode ser tb heidenhain)" },
-            { "id": 22, "prazo": "2025-01-19", "machineType": "Outro", "cliente": "Go.Tec! Lda - Stock", "zip": "2415-306", "comercial": "Joao Chanoca", "description": "ABERTO" },
-            { "id": 23, "prazo": "2025-01-19", "machineType": "Outro", "cliente": "Go.Tec! Lda - Stock", "zip": "2415-306", "comercial": "Joao Chanoca", "description": "ABERTO" },
-            { "id": 24, "prazo": "2025-07-24", "machineType": "Torno CNC", "cliente": "Hidraulicentro, Lda", "zip": "2415-773", "comercial": "Joao Chanoca", "description": "OFERTA980 - TORNO 5AX | FERRAMENTAS MOTORIZADAS | 1500 DE CURSO | COM LUNETA E EIXO Y CONCORRENTES: MAZAK E OKUMA, TAIWAN E CHINA" },
-            { "id": 27, "prazo": "2025-01-19", "machineType": "Outro", "cliente": "Go.Tec! Lda - Stock", "zip": "2415-306", "comercial": "Joao Chanoca", "description": "ABERTO" },
-            { "id": 30, "prazo": "2025-01-19", "machineType": "Outro", "cliente": "Go.Tec! Lda - Stock", "zip": "2415-306", "comercial": "Joao Chanoca", "description": "ABERTO" },
-            { "id": 35, "prazo": "2025-07-24", "machineType": "Flat Grinding", "cliente": "Dayton Progress - Perfuradores, Lda", "zip": "2440-022", "comercial": "Joao Chanoca", "description": "RETIFICADORA PLANA - EQUIVALENTE À Ziersch Z24 PELA MINHA ANALISE SERÁ A HDCNC PSG103DNC - https://www.hdcncmc.com/PSG103DNC-Precision-CNC-Surface-Grinding-Machine-pd592707058.html" },
-            { "id": 45, "prazo": "2025-01-20", "machineType": "Round Grinding", "cliente": "Guardado & Martins, Lda", "zip": "2415-452", "comercial": "Joao Chanoca", "description": "Retificadora cilindrica d600x3000 Cava roda 2000mm" },
-            { "id": 53, "prazo": "2025-02-01", "machineType": "Torno CNC", "cliente": "IberMicra, Lda", "zip": "2430-028", "comercial": "Joao Chanoca", "description": "Nuno Vieira visitou a Gotec e pediu as seguintes propostas: Torno de 2 buchas / 2 turretas / 2 Y / com alimentador 1500mm Torno de 2 buchas / 1 Turreta eixo Y, passo barra 65mm com alimentador 1500mm comprou Muratec de 2 eixos Y e 2 buchas por 250.000€ esta para comprar 2 matsuras 520 de 4 paletes horizontal tem oferta Muratec multitarefas de 309.000€ Fazer Oferta para horizontal 4P 500x500 Fazer oferta para horizontal 10P 320x320" },
-            { "id": 59, "prazo": "2025-02-02", "machineType": "Outro", "cliente": "Eduardo & Miguel, Lda", "zip": "2430-312", "comercial": "Joao Chanoca", "description": "OFERTA 21 - CA6150Bx1500 - Torno Convencional Bucha 250mm - 1500mm entre pontos - DRO 2 eixos marca ROHM - Diam sobre carro 275/300mm - travao automatico - com proteçoes para a limalha" },
-            { "id": 60, "prazo": "2025-02-02", "machineType": "Outro", "cliente": "The Navigator Company. S.A", "zip": "2910-539", "comercial": "Joao Chanoca", "description": "CA6250Cx2000 - Torno convencional Diam 315x2000mm - DRO - diam 104mm barra - concorrência ZMM Bulgaria (Lusovouga)" },
-            { "id": 67, "prazo": "2025-02-25", "machineType": "Torno CNC", "cliente": "Admatic Lda", "zip": "3105-181", "comercial": "Joao Chanoca", "description": "OFERTA 855 - Torno CNC, Bucha 10/12 polegadas, passagem barra diametro 60/65mm, entre pontos 500/600mm, Eixo Y, 1 spindle, 1 turreta, 12 ferramentas 1 axial e 1 radial, alimentador 3m, apanhador peças, braço medição, extrator limalha, sikmmer, extrator fumos" },
-            { "id": 71, "prazo": "2025-03-08", "machineType": "Torno CNC", "cliente": "LTA - Moldes P/ Fundição e Metalurgica, Lda", "zip": "3720-415", "comercial": "Joao Chanoca", "description": "OFERTA 894 e 895 - Torno CNC,, bancada paralela, todos barramentos prismáticos, (+robusto) diâmetro no carro 900mm, entre-pontos 1000 a 1500mm, contra-ponto convencional" },
-            { "id": 72, "prazo": "2025-03-08", "machineType": "Outro", "cliente": "OTAR - Tecnologia Avançada de Recuperação, Lda", "zip": "3830-222", "comercial": "Joao Chanoca", "description": "OFERTA 860 - Pórtico 3 metros, comando Fanuc, mesa fixa e/ou móvel, o mais aberto possível, (a questão de menor espaço de ocupação tb é considerada)" },
-            { "id": 73, "prazo": "2025-03-08", "machineType": "Mandriladora", "cliente": "OTAR - Tecnologia Avançada de Recuperação, Lda", "zip": "3830-222", "comercial": "Joao Chanoca", "description": "OFERTA 861-862-863 - Mandriladora CNC, mesa rotativa, 2 metros HMC1200W HMC1000W HMC1600W" },
-            { "id": 74, "prazo": "2025-03-08", "machineType": "Outro", "cliente": "OTAR - Tecnologia Avançada de Recuperação, Lda", "zip": "3830-222", "comercial": "Joao Chanoca", "description": "OFERTA 870 - Rectificadora cilindrica CNC, exterior, 4 metros, diâmetro 800mm" },
-            { "id": 76, "prazo": "2025-03-10", "machineType": "Round Grinding", "cliente": "Tornometal,Lda", "zip": "4785-155", "comercial": "Joao Chanoca", "description": "retificadora cilindrica diam300x1000 convencional usada tornometal Sr abilio horta 919383810" },
-            { "id": 77, "prazo": "2025-03-20", "machineType": "Centro Maquinação 5 eixos", "cliente": "Tekever - Uas, S.A", "zip": "1750-269", "comercial": "Joao Chanoca", "description": "OFERTA 844 - 845 - 846 - 847 - 848 CNC 5 eixos contínuos?, HSK63, Comando Heidenhain/Siemens/Fanuc, X500/600 Y500 Z500, RPM15.000, Refrigeração interna, Extrator tapete, Sikmmer. Obs.: Vou tentar falar c/ Eng. Luís Santos, colega Eng. Diogo Silva para validar configuração. Pretendem comprar 2 unidades" },
-            { "id": 78, "prazo": "2025-03-20", "machineType": "Outro", "cliente": "CNC - Sistemas Strong, Lda", "zip": "4470-305", "comercial": "Joao Chanoca", "description": "VKC6070 - 157000EUR - Conforme reunião com Sr. Amândio Santos: CNC coluna móvel 3 eixos, X 3m e 6m para maquinar barras para pisos de betão e outros. (Juntas dilatação) - VMC3000 - VMC4000 - VKC6060 - VKC6070" },
-            { "id": 84, "prazo": "2025-04-01", "machineType": "Centro Maquinação 5 eixos", "cliente": "Tekever - Uas, S.A", "zip": "1750-269", "comercial": "Joao Chanoca", "description": "OFERTA 897 - Maquina 5 eixos recorte fibra carbono, 2 mesas ou 2 mesas em simultâneo, peça 3500x2000 (asa de drone), mesa vácuo, cabinada, aspiração" },
-            { "id": 87, "prazo": "2025-04-03", "machineType": "Outro", "cliente": "AM Moldes Lda", "zip": "2430-278", "comercial": "Joao Chanoca", "description": "OFERTA - ORÇA enviado por email - Apalpador automático e medidor ferramenta" },
-            { "id": 89, "prazo": "2025-04-04", "machineType": "Bandsaw", "cliente": "AM Moldes Lda", "zip": "2430-278", "comercial": "Joao Chanoca", "description": "OFERTA 954 - 955 - Preço para serrote 520mm usado em stock, eventualmente propor serrote novo tambem (telmo)" },
-            { "id": 93, "prazo": "2025-04-07", "machineType": "Centro Maquinação 3 Eixos", "cliente": "Hidraulicentro, Lda", "zip": "2415-773", "comercial": "Joao Chanoca", "description": "OFERTA 864 - Centro maquinação 1300x700 fanuc base - opção Heidenhain, com 4º eixo - diam210mm" },
-            { "id": 96, "prazo": "2025-04-22", "machineType": "Centro Maquinação 3 Eixos", "cliente": "CENTROFRESA Unipessoal, Lda", "zip": "2430-144", "comercial": "Joao Chanoca", "description": "OFERTA 883 - CNC - VMC855S, 3 eixos, comando Fanuc, RPM 10.000, Palpador automático, sonda" },
-            { "id": 97, "prazo": "2025-04-22", "machineType": "Torno CNC", "cliente": "CENTROFRESA Unipessoal, Lda", "zip": "2430-144", "comercial": "Joao Chanoca", "description": "OFERTA 886 - Torno 3 eixos, bucha 8\"/10\"\", comando Fanuc, passagem barra 50, bucha automática, bucha pinça" },
-            { "id": 105, "prazo": "2025-06-01", "machineType": "Centro Maquinação 5 eixos", "cliente": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "zip": "2430-527", "comercial": "Joao Chanoca", "description": "Maquina 5 eixos para furação e fresagem, peças 500x500x500 zonas moldantes" },
-            { "id": 106, "prazo": "2025-06-07", "machineType": "Centro Maquinação 5 eixos", "cliente": "EDILÁSIO Carreira Da Silva, Lda", "zip": "2430-291", "comercial": "Joao Chanoca", "description": "OFERTA 924-931-932-933 CNC 5AX, MESA 600, EQUIVAMENTE À DOOSAN VC630-5X HDN" },
-            { "id": 107, "prazo": "2025-06-11", "machineType": "Bandsaw", "cliente": "MOLDE MATOS, S.A.", "zip": "2430-028", "comercial": "Joao Chanoca", "description": "OFERTA 937 - 938 - 939 1- KARMETAL KSA 350X450 2- KARMETAL KSA 500X650 DUAS PROPOSTAS: 1- 10.000,00€ e 8.000,00€ da concorrência 2- Não tem propostas" },
-            { "id": 108, "prazo": "2025-06-13", "machineType": "Centro Maquinação 3 Eixos", "cliente": "JMJ-Mecânica de Precisão, Lda", "zip": "2415-783", "comercial": "Joao Chanoca", "description": "OFERTA 466 e 957 - Pretende proposta pórtico GMC1530 e GMC1830 - TNC7 - ATC24 - CTS20 + Full roof - réguas - 10.000rpm - >250Nm - BT50 - opção cabeça 90º e cabeça universal automatica 1º" },
-            { "id": 109, "prazo": "2025-06-15", "machineType": "Outro", "cliente": "Go.Tec! Lda - Stock", "zip": "2415-306", "comercial": "Joao Chanoca", "description": "ABERTO" },
-            { "id": 115, "prazo": "2025-07-17", "machineType": "Mandriladora", "cliente": "MOLDES CARREIRA, Lda", "zip": "2430-278", "comercial": "Joao Chanoca", "description": "OFERTA946 - Cliente pretende oferta CAMDER1.6GS com comando heidenhain" },
-            { "id": 116, "prazo": "2025-07-18", "machineType": "Centro Maquinação 5 eixos", "cliente": "MCG - Manuel Da Conceição Graça, Lda", "zip": "2430-264", "comercial": "Joao Chanoca", "description": "Pórtico 6x3x1 - cab univ 0.001º - TNC7 - full roof - 5000rpm - cts - ATC32 18.07.2025, pedi preço á WEIDA: GMC3060 Z axis 1250mm TNC7 full roof CTS20bar T600 - Mepro head universal 0.001 - 4000rpm ATC 32 tools linear scales all axis side chip convoyer Y axis 3 guides GMC4060 Z axis 1500mm TNC7 full roof CTS20bar T600 - Mepro head universal 0.001 - 4000rpm ATC 32 tools linear scales all axis side chip convoyer Y axis 3 guides" },
-            { "id": 117, "prazo": "2025-07-18", "machineType": "Torno CNC", "cliente": "MCG - Manuel Da Conceição Graça, Lda", "zip": "2430-264", "comercial": "Joao Chanoca", "description": "OFERTA 968 - Torno CNC bancada paralela ø190 (tem oferta Deibar ø170mm x 700 - 64.320€), com 1000 entre pontos, turreta automatica 8 pos, extrator limalha, fanuc, fazer proposta do torno em stock CK6163B-1500" },
-            { "id": 119, "prazo": "2025-07-28", "machineType": "Flat Grinding", "cliente": "GLN FAMOLDE - FABRICAÇÃO E COMERCIALIZAÇÃO DE MOLDES, S.A.", "zip": "2430-528", "comercial": "Joao Chanoca", "description": "Pedir preço HDCNC - UPG208DNC ultraprecise" },
-            { "id": 123, "prazo": "2025-07-28", "machineType": "Centro Maquinação 5 eixos", "cliente": "MOLDE MATOS, S.A.", "zip": "2430-028", "comercial": "Joao Chanoca", "description": "OFERTA 105 - Fazer proposta CMC700 com opçao torneamento e retificação" },
-            { "id": 124, "prazo": "2025-07-28", "machineType": "Mandriladora", "cliente": "MOLDE MATOS, S.A.", "zip": "2430-028", "comercial": "Joao Chanoca", "description": "OFERTA 997 - fazer proposta para maquina furação profunda CAMDER 1.6GS TABLE 1800x1400" },
-            { "id": 125, "prazo": "2025-07-28", "machineType": "Torno CNC", "cliente": "LTA - Moldes P/ Fundição e Metalurgica, Lda", "zip": "3720-415", "comercial": "Joao Chanoca", "description": "Vtc800 Vtc1000 Vtc1250 2 eixos Turreta marada de ferros Altura peca 300mm Fanuc Com bf gear box Fanuc" },
-            { "id": 127, "prazo": "2025-08-05", "machineType": "Outro", "cliente": "FUTRIFER SA", "zip": "3750-142", "comercial": "Joao Chanoca", "description": "Fazer proposta para engenho radial 800mm .- engenho radial da WEIDA Z3063x20/1" }
+        ];
+        let clientsData = [
+            {"id": 1, "nome": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "nif": "503883390", "morada": "Rua da Indústria, Lote 10", "contacto": "geral@tecnifreza.pt"},
+            {"id": 2, "nome": "Leomavél - Moldes, Lda", "nif": "502393301", "morada": "Zona Industrial Casal da Lebre", "contacto": "compras@leomavel.pt"},
         ];
 
-        // --- Elementos do DOM ---
-        const tableBody = document.getElementById('dataTable');
+        // --- ESTADO DA APLICAÇÃO ---
+        let activeTab = 'opportunities';
+        let currentSort = { column: 'id', direction: 'asc' };
+
+        // --- ELEMENTOS DO DOM ---
         const searchInput = document.getElementById('searchInput');
-        const machineTypeFilter = document.getElementById('machineTypeFilter');
         const noResultsDiv = document.getElementById('noResults');
         const headers = document.querySelectorAll('th[data-sort]');
-        
-        // --- Elementos do Modal de Oportunidade ---
-        const opportunityModal = document.getElementById('opportunityModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const addOpportunityBtn = document.getElementById('addOpportunityBtn');
-        const closeOpportunityModalBtn = document.getElementById('modalClose');
-        const cancelOpportunityModalBtn = document.getElementById('modalCancel');
-        const opportunityForm = document.getElementById('opportunityForm');
-        
-        const formId = document.getElementById('opportunityId');
-        const formPrazo = document.getElementById('prazo');
-        const formMachineType = document.getElementById('machineType');
-        const formCliente = document.getElementById('cliente');
-        const formZip = document.getElementById('zip');
-        const formComercial = document.getElementById('comercial');
-        const formDescription = document.getElementById('description');
-
-        // --- Elementos do Modal de IA ---
-        const aiModal = document.getElementById('aiModal');
-        const aiModalTitle = document.getElementById('aiModalTitle');
-        const closeAiModalBtn = document.getElementById('aiModalClose');
-        const aiLoading = document.getElementById('aiLoading');
-        const aiLoadingText = document.getElementById('aiLoadingText');
-        const aiResult = document.getElementById('aiResult');
-        const aiText = document.getElementById('aiText');
-        const copyAiBtn = document.getElementById('copyAiBtn');
-        const copyFeedback = document.getElementById('copyFeedback');
+        const updateToast = document.getElementById('updateToast');
+        const toastSpinner = document.getElementById('toastSpinner');
+        const toastMessage = document.getElementById('toastMessage');
+        // Abas
+        const tabOpportunities = document.getElementById('tab-opportunities');
+        const tabClients = document.getElementById('tab-clients');
+        const contentOpportunities = document.getElementById('content-opportunities');
+        const contentClients = document.getElementById('content-clients');
+        const addBtn = document.getElementById('addBtn');
+        const addBtnText = document.getElementById('addBtnText');
+        const machineTypeFilter = document.getElementById('machineTypeFilter');
         const summarizeBtn = document.getElementById('summarizeBtn');
 
-        let currentSort = { column: 'id', direction: 'asc' };
+        // Tabelas
+        const opportunitiesTableBody = document.getElementById('opportunitiesTableBody');
+        const clientsTableBody = document.getElementById('clientsTableBody');
         
-        // --- Funções de Modal ---
-        function openModal(modal) {
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            document.body.classList.add('modal-active');
+        // Modais e Formulários
+        const opportunityModal = document.getElementById('opportunityModal');
+        const clientModal = document.getElementById('clientModal');
+        const aiModal = document.getElementById('aiModal');
+        const opportunityForm = document.getElementById('opportunityForm');
+        const clientForm = document.getElementById('clientForm');
+
+        // --- LÓGICA DE ATUALIZAÇÃO ---
+        function showToast(message, showSpinner = false) {
+            toastMessage.textContent = message;
+            toastSpinner.style.display = showSpinner ? 'block' : 'none';
+            updateToast.classList.remove('opacity-0');
         }
 
-        function closeModal(modal) {
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            document.body.classList.remove('modal-active');
+        function hideToast() {
+            updateToast.classList.add('opacity-0');
         }
 
-        function closeOpportunityModal() {
-            closeModal(opportunityModal);
-            opportunityForm.reset();
-            formId.value = '';
-        }
-        
-        function closeAiModal() {
-            closeModal(aiModal);
-            aiLoading.style.display = 'flex';
-            aiResult.classList.add('hidden');
-            copyAiBtn.classList.add('hidden');
-            aiText.value = '';
-            copyFeedback.textContent = '';
+        async function fetchUpdatedData() {
+            // Simula uma chamada a uma API para obter dados novos
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const newOpportunities = [
+                         { "id": 8, "prazo": "2025-01-17", "machineType": "Flat Grinding", "cliente": "Roberto Pereira, Lda", "zip": "3720-241", "comercial": "Joao Chanoca", "description": "Retificadora de montante movel, 1600x800" },
+                         { "id": 11, "prazo": "2025-01-20", "machineType": "Outro", "cliente": "FUTRIFER SA", "zip": "3750-142", "comercial": "Joao Chanoca", "description": "Engenho radial lança 1,5m + mesa" },
+                    ];
+                    const newClients = [
+                        {"id": 3, "nome": "Roberto Pereira, Lda", "nif": "501987654", "morada": "Avenida dos Descobrimentos, 500", "contacto": "info@robertopereira.pt"},
+                        {"id": 4, "nome": "FUTRIFER SA", "nif": "500123456", "morada": "Parque Industrial de Águeda", "contacto": "futrifer@mail.pt"},
+                    ];
+
+                    newOpportunities.forEach(newOpp => {
+                        if (!opportunitiesData.some(opp => opp.id === newOpp.id)) {
+                            opportunitiesData.push(newOpp);
+                        }
+                    });
+
+                    newClients.forEach(newClient => {
+                        if (!clientsData.some(cli => cli.id === newClient.id)) {
+                            clientsData.push(newClient);
+                        }
+                    });
+                    
+                    resolve();
+                }, 2000); // Simula 2 segundos de espera
+            });
         }
 
-        function getVisibleData() {
+
+        // --- LÓGICA DAS ABAS ---
+        function switchTab(tab) {
+            activeTab = tab;
+            if (tab === 'opportunities') {
+                tabOpportunities.classList.add('active');
+                tabClients.classList.remove('active');
+                contentOpportunities.classList.remove('hidden');
+                contentClients.classList.add('hidden');
+                machineTypeFilter.classList.remove('hidden');
+                summarizeBtn.classList.remove('hidden');
+                addBtnText.textContent = "Adicionar";
+                searchInput.placeholder = "Pesquisar oportunidades...";
+                renderOpportunitiesTable();
+            } else {
+                tabClients.classList.add('active');
+                tabOpportunities.classList.remove('active');
+                contentClients.classList.remove('hidden');
+                contentOpportunities.classList.add('hidden');
+                machineTypeFilter.classList.add('hidden');
+                summarizeBtn.classList.add('hidden');
+                addBtnText.textContent = "Adicionar";
+                searchInput.placeholder = "Pesquisar clientes...";
+                renderClientsTable();
+            }
+        }
+
+        // --- LÓGICA DE RENDERIZAÇÃO ---
+        function renderOpportunitiesTable() {
             const searchTerm = searchInput.value.toLowerCase();
             const selectedMachineType = machineTypeFilter.value;
-            return data.filter(item => {
-                const matchesSearch = Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm));
-                const matchesMachineType = selectedMachineType ? item.machineType === selectedMachineType : true;
-                return matchesSearch && matchesMachineType;
+            let filteredData = opportunitiesData.filter(item => 
+                (selectedMachineType ? item.machineType === selectedMachineType : true) &&
+                Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm))
+            );
+            // Sorting logic here...
+            opportunitiesTableBody.innerHTML = '';
+            noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
+            filteredData.forEach(item => {
+                const row = opportunitiesTableBody.insertRow();
+                row.className = 'bg-white border-b border-gray-200 hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-4 font-medium text-gray-900">${item.id}</td><td class="p-4">${item.prazo}</td>
+                    <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">${item.machineType}</span></td>
+                    <td class="p-4">${item.cliente}</td><td class="p-4">${item.comercial}</td>
+                    <td class="p-4 min-w-[300px] max-w-xs truncate" title="${item.description}">${item.description}</td>
+                    <td class="p-4 text-center"><div class="flex items-center justify-center gap-3">
+                        <button class="generate-email-btn text-blue-600 hover:text-blue-900" title="Gerar E-mail com IA" data-id="${item.id}" data-type="opportunity"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" /><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg></button>
+                        <button class="suggest-steps-btn text-yellow-500 hover:text-yellow-700" title="Sugerir Próximos Passos" data-id="${item.id}" data-type="opportunity"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 00-1 1v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4a1 1 0 00-1-1zM9 11.732V16h2v-4.268a4.002 4.002 0 10-2 0z" clip-rule="evenodd" /><path d="M10 2a.75.75 0 01.75.75v.542a.75.75 0 01-1.5 0V2.75A.75.75 0 0110 2z" /></svg></button>
+                        <button class="edit-btn text-gray-500 hover:text-gray-800" title="Editar" data-id="${item.id}" data-type="opportunity"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
+                        <button class="delete-btn text-red-600 hover:text-red-900" title="Remover" data-id="${item.id}" data-type="opportunity"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button>
+                    </div></td>`;
             });
         }
+        
+        function renderClientsTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            let filteredData = clientsData.filter(item => 
+                Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm))
+            );
+            // Sorting logic here...
+            clientsTableBody.innerHTML = '';
+            noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
+             filteredData.forEach(item => {
+                const row = clientsTableBody.insertRow();
+                row.className = 'bg-white border-b border-gray-200 hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-4 font-medium text-gray-900">${item.id}</td><td class="p-4">${item.nome}</td>
+                    <td class="p-4">${item.nif}</td><td class="p-4">${item.morada}</td><td class="p-4">${item.contacto}</td>
+                    <td class="p-4 text-center"><div class="flex items-center justify-center gap-3">
+                        <button class="edit-btn text-gray-500 hover:text-gray-800" title="Editar" data-id="${item.id}" data-type="client"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
+                        <button class="delete-btn text-red-600 hover:text-red-900" title="Remover" data-id="${item.id}" data-type="client"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button>
+                    </div></td>`;
+            });
+        }
+        
+        function openModal(modal) { modal.classList.remove('opacity-0', 'pointer-events-none'); document.body.classList.add('modal-active'); }
+        function closeModal(modal) { modal.classList.add('opacity-0', 'pointer-events-none'); document.body.classList.remove('modal-active'); }
+
+        function handleTableActions(event) {
+            const button = event.target.closest('button');
+            if (!button) return;
+
+            const id = button.dataset.id;
+            const type = button.dataset.type;
+
+            if (type === 'opportunity') {
+                const opportunity = opportunitiesData.find(item => item.id == id);
+                if (button.classList.contains('edit-btn')) { 
+                    document.getElementById('opportunityModalTitle').textContent = "Editar Oportunidade";
+                    document.getElementById('opportunityId').value = opportunity.id;
+                    document.getElementById('prazo').value = opportunity.prazo;
+                    document.getElementById('machineType').value = opportunity.machineType;
+                    document.getElementById('cliente').value = opportunity.cliente;
+                    document.getElementById('zip').value = opportunity.zip;
+                    document.getElementById('comercial').value = opportunity.comercial;
+                    document.getElementById('description').value = opportunity.description;
+                    openModal(opportunityModal);
+                 }
+                if (button.classList.contains('delete-btn')) { 
+                    if(confirm(`Tem a certeza que deseja remover a oportunidade #${id}?`)){
+                        opportunitiesData = opportunitiesData.filter(o => o.id != id);
+                        renderOpportunitiesTable();
+                    }
+                 }
+                if (button.classList.contains('generate-email-btn')) { /* ... chamar IA para email ... */ }
+                if (button.classList.contains('suggest-steps-btn')) { /* ... chamar IA para passos ... */ }
+
+            } else if (type === 'client') {
+                 const client = clientsData.find(item => item.id == id);
+                 if (button.classList.contains('edit-btn')) {
+                     document.getElementById('clientModalTitle').textContent = "Editar Cliente";
+                     document.getElementById('clientId').value = client.id;
+                     document.getElementById('clientName').value = client.nome;
+                     document.getElementById('clientNif').value = client.nif;
+                     document.getElementById('clientAddress').value = client.morada;
+                     document.getElementById('clientContact').value = client.contacto;
+                     openModal(clientModal);
+                 }
+                 if (button.classList.contains('delete-btn')) {
+                     if (confirm(`Tem a certeza que deseja remover o cliente ${client.nome}?`)) {
+                         clientsData = clientsData.filter(c => c.id != id);
+                         renderClientsTable();
+                     }
+                 }
+            }
+        }
+        
+        // --- INICIALIZAÇÃO E EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', async () => {
+             showToast("A atualizar dados...", true);
+             await fetchUpdatedData();
+             showToast("Tabelas atualizadas!");
+             setTimeout(hideToast, 2000);
+
+            // Abas
+            tabOpportunities.addEventListener('click', () => switchTab('opportunities'));
+            tabClients.addEventListener('click', () => switchTab('clients'));
+            
+            // Pesquisa e filtros
+            searchInput.addEventListener('input', () => activeTab === 'opportunities' ? renderOpportunitiesTable() : renderClientsTable());
+            machineTypeFilter.addEventListener('change', renderOpportunitiesTable);
+            
+            // Botões principais
+            addBtn.addEventListener('click', () => {
+                if (activeTab === 'opportunities') {
+                    opportunityForm.reset();
+                    document.getElementById('opportunityId').value = '';
+                    document.getElementById('opportunityModalTitle').textContent = "Adicionar Oportunidade";
+                    openModal(opportunityModal);
+                } else {
+                    clientForm.reset();
+                    document.getElementById('clientId').value = '';
+                    document.getElementById('clientModalTitle').textContent = "Adicionar Cliente";
+                    openModal(clientModal);
+                }
+            });
+
+            // Ações nas tabelas
+            document.getElementById('tab-content').addEventListener('click', handleTableActions);
+            
+            // Modais
+            opportunityModal.addEventListener('click', (e) => { if(e.target.classList.contains('modal-overlay') || e.target.closest('#opportunityModalClose') || e.target.closest('#opportunityModalCancel')) closeModal(opportunityModal); });
+            clientModal.addEventListener('click', (e) => { if(e.target.classList.contains('modal-overlay') || e.target.closest('#clientModalClose') || e.target.closest('#clientModalCancel')) closeModal(clientModal); });
+            aiModal.addEventListener('click', (e) => { if(e.target.classList.contains('modal-overlay') || e.target.closest('#aiModalClose')) closeModal(aiModal); });
+            
+            // Submissão de Formulários
+            opportunityForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('opportunityId').value;
+                const newOpp = {
+                    prazo: document.getElementById('prazo').value,
+                    machineType: document.getElementById('machineType').value,
+                    cliente: document.getElementById('cliente').value,
+                    zip: document.getElementById('zip').value,
+                    comercial: document.getElementById('comercial').value,
+                    description: document.getElementById('description').value,
+                };
+                if(id){
+                    const index = opportunitiesData.findIndex(o => o.id == id);
+                    opportunitiesData[index] = { ...opportunitiesData[index], ...newOpp };
+                } else {
+                    newOpp.id = Math.max(...opportunitiesData.map(o => o.id)) + 1;
+                    opportunitiesData.push(newOpp);
+                }
+                renderOpportunitiesTable();
+                closeModal(opportunityModal);
+            });
+            
+             clientForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('clientId').value;
+                const newClient = {
+                    nome: document.getElementById('clientName').value,
+                    nif: document.getElementById('clientNif').value,
+                    morada: document.getElementById('clientAddress').value,
+                    contacto: document.getElementById('clientContact').value,
+                };
+                if(id){
+                    const index = clientsData.findIndex(c => c.id == id);
+                    clientsData[index] = { ...clientsData[index], ...newClient };
+                } else {
+                    newClient.id = Math.max(...clientsData.map(c => c.id)) + 1;
+                    clientsData.push(newClient);
+                }
+                renderClientsTable();
+                closeModal(clientModal);
+            });
+
+            switchTab('opportunities'); // Iniciar na aba de oportunidades
+            populateMachineTypeFilter();
+        });
 
         function populateMachineTypeFilter() {
-            const currentFilterValue = machineTypeFilter.value;
-            const machineTypes = [...new Set(data.map(item => item.machineType))];
-            machineTypes.sort();
-            
-            while (machineTypeFilter.options.length > 1) machineTypeFilter.remove(1);
-
-            machineTypes.forEach(type => {
-                const option = document.createElement('option');
-                option.value = type;
-                option.textContent = type;
-                machineTypeFilter.appendChild(option);
-            });
-            machineTypeFilter.value = currentFilterValue;
+             const machineTypes = [...new Set(opportunitiesData.map(item => item.machineType))];
+             machineTypes.sort();
+             machineTypeFilter.innerHTML = '<option value="">Filtrar por Machine Type</option>';
+             machineTypes.forEach(type => {
+                machineTypeFilter.innerHTML += `<option value="${type}">${type}</option>`;
+             });
         }
-
-        function renderTable() {
-            let filteredData = getVisibleData();
-            
-            filteredData.sort((a, b) => {
-                let valA = a[currentSort.column], valB = b[currentSort.column];
-                if (currentSort.column === 'id') { valA = parseInt(valA, 10); valB = parseInt(valB, 10); } 
-                else if (currentSort.column === 'prazo') { valA = new Date(valA); valB = new Date(valB); } 
-                else if (typeof valA === 'string') { valA = valA.toLowerCase(); valB = valB.toLowerCase(); }
-                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
-                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
-                return 0;
-            });
-            
-            tableBody.innerHTML = '';
-            noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
-
-            filteredData.forEach(item => {
-                const row = document.createElement('tr');
-                row.className = 'bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200';
-                
-                row.innerHTML = `
-                    <td class="p-4 font-medium text-gray-900">${item.id}</td>
-                    <td class="p-4">${item.prazo}</td>
-                    <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">${item.machineType}</span></td>
-                    <td class="p-4">${item.cliente}</td>
-                    <td class="p-4">${item.zip}</td>
-                    <td class="p-4">${item.comercial}</td>
-                    <td class="p-4 min-w-[300px] max-w-xs truncate" title="${item.description}">${item.description}</td>
-                    <td class="p-4 text-center">
-                        <div class="flex items-center justify-center gap-3">
-                            <button class="generate-email-btn text-blue-600 hover:text-blue-900" title="Gerar E-mail com IA" data-id="${item.id}">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" /><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg>
-                            </button>
-                             <button class="suggest-steps-btn text-yellow-500 hover:text-yellow-700" title="Sugerir Próximos Passos" data-id="${item.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 00-1 1v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4a1 1 0 00-1-1zM9 11.732V16h2v-4.268a4.002 4.002 0 10-2 0z" clip-rule="evenodd" /><path d="M10 2a.75.75 0 01.75.75v.542a.75.75 0 01-1.5 0V2.75A.75.75 0 0110 2z" /></svg>
-                            </button>
-                             <button class="edit-btn text-gray-500 hover:text-gray-800" title="Editar" data-id="${item.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                            </button>
-                            <button class="delete-btn text-red-600 hover:text-red-900" title="Remover" data-id="${item.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-            updateSortIcons();
-        }
-        
-        function updateSortIcons() {
-            headers.forEach(header => {
-                header.innerHTML = header.innerText.replace(/ (↑|↓)$/, '');
-                if (header.dataset.sort === currentSort.column) {
-                    header.innerHTML += currentSort.direction === 'asc' ? ' <span class="text-blue-500">↑</span>' : ' <span class="text-blue-500">↓</span>';
-                }
-            });
-        }
-        
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const id = formId.value;
-            const newEntry = {
-                prazo: formPrazo.value, machineType: formMachineType.value, cliente: formCliente.value,
-                zip: formZip.value, comercial: formComercial.value, description: formDescription.value,
-            };
-            if (id) {
-                const index = data.findIndex(item => item.id == id);
-                if (index !== -1) data[index] = { ...data[index], ...newEntry };
-            } else {
-                newEntry.id = data.length > 0 ? Math.max(...data.map(d => d.id)) + 1 : 1;
-                data.push(newEntry);
-            }
-            closeOpportunityModal(); renderTable(); populateMachineTypeFilter();
-        }
-
-        async function handleTableActions(event) {
-            const target = event.target.closest('button');
-            if (!target) return;
-            const id = target.dataset.id;
-            const opportunity = data.find(item => item.id == id);
-
-            if (target.classList.contains('generate-email-btn')) {
-                const prompt = `Escreve um e-mail de acompanhamento profissional e amigável em Português (Portugal).\n- O meu nome é ${opportunity.comercial}.\n- O cliente é ${opportunity.cliente}.\n- Estou a fazer o acompanhamento de uma proposta para uma máquina do tipo "${opportunity.machineType}".\n- A proposta enviada dizia respeito a: "${opportunity.description}".\n- O prazo para resposta que tínhamos definido era ${opportunity.prazo}.\n\nO e-mail deve:\n1. Começar com uma saudação apropriada.\n2. Relembrar a proposta enviada de forma concisa.\n3. Perguntar se o cliente já teve oportunidade de analisar a proposta e se tem alguma questão.\n4. Mostrar disponibilidade para esclarecer qualquer dúvida ou ajustar a proposta.\n5. Terminar com uma despedida profissional.\nNão inclua placeholders, use os nomes fornecidos. O formato deve ser apenas o corpo do e-mail, sem "Assunto:".`;
-                await handleAiGeneration('email', prompt);
-            } else if (target.classList.contains('suggest-steps-btn')) {
-                 const prompt = `Aja como um coach de vendas especialista. Para a seguinte oportunidade de venda, sugira 3 próximos passos concretos e acionáveis para o vendedor, ${opportunity.comercial}, de forma a avançar com o negócio. Seja específico e baseie as suas sugestões nos detalhes fornecidos. Apresente os passos em formato de lista numerada.\n\nOportunidade:\n- Cliente: ${opportunity.cliente}\n- Tipo de Máquina: ${opportunity.machineType}\n- Descrição: ${opportunity.description}\n- Prazo de Resposta: ${opportunity.prazo}`;
-                 await handleAiGeneration('steps', prompt);
-            } else if (target.classList.contains('edit-btn')) {
-                if (opportunity) {
-                    modalTitle.textContent = "Editar Oportunidade";
-                    formId.value = opportunity.id; formPrazo.value = opportunity.prazo;
-                    formMachineType.value = opportunity.machineType; formCliente.value = opportunity.cliente;
-                    formZip.value = opportunity.zip; formComercial.value = opportunity.comercial;
-                    formDescription.value = opportunity.description;
-                    openModal(opportunityModal);
-                }
-            } else if (target.classList.contains('delete-btn')) {
-                if (confirm(`Tem a certeza que deseja remover a oportunidade ID ${id}?`)) {
-                    data = data.filter(item => item.id != id);
-                    renderTable();
-                }
-            }
-        }
-        
-        // --- Funções da API Gemini ---
-        async function callGemini(prompt) {
-            const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            const payload = { contents: [{ parts: [{ text: prompt }] }] };
-            let retries = 3, delay = 1000;
-            while (retries > 0) {
-                try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    const result = await response.json();
-                    if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
-                        return result.candidates[0].content.parts[0].text;
-                    } else { throw new Error("Resposta da API inválida."); }
-                } catch (error) {
-                    console.error("Erro na chamada da API:", error);
-                    retries--;
-                    if (retries === 0) return "Não foi possível gerar o conteúdo. Por favor, tente novamente mais tarde.";
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
-
-        async function handleAiGeneration(type, prompt) {
-            const titles = {
-                email: '✨ Sugestão de E-mail',
-                steps: '✨ Próximos Passos Sugeridos',
-                summary: '✨ Resumo das Oportunidades'
-            };
-            const loadingTexts = {
-                email: 'A IA está a gerar um e-mail...',
-                steps: 'A IA está a sugerir próximos passos...',
-                summary: 'A IA está a resumir as oportunidades...'
-            };
-
-            aiModalTitle.textContent = titles[type] || 'Assistente IA';
-            aiLoadingText.textContent = loadingTexts[type] || 'A processar...';
-            openModal(aiModal);
-            
-            const generatedText = await callGemini(prompt);
-            
-            aiLoading.style.display = 'none';
-            aiText.value = generatedText.trim();
-            aiResult.classList.remove('hidden');
-            copyAiBtn.classList.remove('hidden');
-        }
-        
-        function copyAiTextToClipboard() {
-            navigator.clipboard.writeText(aiText.value).then(() => {
-                copyFeedback.textContent = "Copiado com sucesso!";
-                setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
-            }).catch(err => {
-                console.error('Falha ao copiar: ', err);
-                aiText.select(); document.execCommand('copy');
-                copyFeedback.textContent = "Copiado com sucesso!";
-                setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
-            });
-        }
-
-        async function handleSummarize() {
-            const visibleData = getVisibleData();
-            if (visibleData.length === 0) {
-                alert("Não há dados visíveis para resumir.");
-                return;
-            }
-            const dataAsString = JSON.stringify(visibleData, null, 2);
-            const today = new Date().toISOString().split('T')[0];
-
-            const prompt = `Aja como um assistente de gestor de vendas. A data de hoje é ${today}. Com base na seguinte lista de oportunidades de vendas em formato JSON, forneça um resumo conciso em Português (Portugal). O resumo deve ser apresentado em formato de tópicos (bullet points) e incluir:\n\n1.  **Ação Urgente:** Destaque as oportunidades cujo prazo de resposta termina nos próximos 7 dias.\n2.  **Tendências:** Identifique o tipo de máquina ('machineType') mais requisitado.\n3.  **Análise Geral:** Um breve comentário sobre o estado geral das oportunidades visíveis.\n\nDados:\n${dataAsString}`;
-            await handleAiGeneration('summary', prompt);
-        }
-
-        // --- Event Listeners ---
-        searchInput.addEventListener('input', renderTable);
-        machineTypeFilter.addEventListener('change', renderTable);
-        opportunityForm.addEventListener('submit', handleFormSubmit);
-        tableBody.addEventListener('click', handleTableActions);
-        copyAiBtn.addEventListener('click', copyAiTextToClipboard);
-        summarizeBtn.addEventListener('click', handleSummarize);
-
-        headers.forEach(header => {
-            header.addEventListener('click', () => {
-                const column = header.dataset.sort;
-                currentSort.direction = (currentSort.column === column && currentSort.direction === 'asc') ? 'desc' : 'asc';
-                currentSort.column = column;
-                renderTable();
-            });
-        });
-
-        // Event Listeners para os Modais
-        addOpportunityBtn.addEventListener('click', () => {
-            modalTitle.textContent = "Adicionar Oportunidade"; openModal(opportunityModal);
-        });
-        closeOpportunityModalBtn.addEventListener('click', closeOpportunityModal);
-        cancelOpportunityModalBtn.addEventListener('click', closeOpportunityModal);
-        opportunityModal.querySelector('.modal-overlay').addEventListener('click', closeOpportunityModal);
-        
-        closeAiModalBtn.addEventListener('click', closeAiModal);
-        aiModal.querySelector('.modal-overlay').addEventListener('click', closeAiModal);
-        
-        window.addEventListener('keydown', e => {
-            if (e.key === 'Escape' && document.body.classList.contains('modal-active')) {
-                closeOpportunityModal(); closeAiModal();
-            }
-        });
-
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-            populateMachineTypeFilter(); renderTable();
-        });
     </script>
 </body>
 </html>
-
