@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
@@ -68,13 +68,15 @@
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="p-6 border-b border-gray-200">
                 <h1 class="text-2xl font-bold text-gray-900">Gestão Comercial</h1>
-                <p class="text-gray-600 mt-1">Navegue entre oportunidades e clientes.</p>
+                <p class="text-gray-600 mt-1">Navegue entre oportunidades, clientes, fornecedores e máquinas.</p>
             </div>
              <!-- Abas de Navegação -->
             <div class="border-b border-gray-200 px-6">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                     <button id="tab-opportunities" class="tab-btn whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm active">Oportunidades</button>
                     <button id="tab-clients" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Clientes</button>
+                    <button id="tab-suppliers" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Fornecedores</button>
+                    <button id="tab-machines" class="tab-btn text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Máquinas</button>
                 </nav>
             </div>
             
@@ -85,7 +87,8 @@
                     <!-- Controlos de Filtro, Pesquisa e Adição -->
                     <div class="p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50 border-b border-gray-200 flex-wrap">
                         <div class="relative w-full md:flex-1 md:min-w-[250px]">
-                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" /></svg>
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75
+ 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" /></svg>
                             <input type="text" id="searchInput" placeholder="Pesquisar..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div class="flex items-center gap-4 w-full md:w-auto flex-wrap">
@@ -120,7 +123,6 @@
 
                 <!-- Aba de Clientes -->
                 <div id="content-clients" class="hidden">
-                    <!-- Tabela de Clientes -->
                      <div class="table-container overflow-x-auto">
                         <table class="w-full text-sm text-left text-gray-600">
                             <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
@@ -137,6 +139,44 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Aba de Fornecedores -->
+                <div id="content-suppliers" class="hidden">
+                     <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-600">
+                            <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
+                                <tr>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nome">Nome</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nif">NIF</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="morada">Morada</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="contacto">Contacto</th>
+                                    <th scope="col" class="p-4 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Aba de Máquinas -->
+                <div id="content-machines" class="hidden">
+                     <div class="table-container overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-600">
+                            <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
+                                <tr>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="tipo">Tipo</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="marca">Marca</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="modelo">Modelo</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="estado">Estado</th>
+                                    <th scope="col" class="p-4 text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="machinesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div id="noResults" class="hidden text-center p-10 text-gray-500">
                 <p class="text-lg font-semibold">Nenhum resultado encontrado.</p>
@@ -150,6 +190,12 @@
     
     <!-- Modal para Adicionar/Editar Cliente -->
     <div id="clientModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="clientModalTitle" class="text-2xl font-bold">Adicionar Cliente</p><div id="clientModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><form id="clientForm"><input type="hidden" id="clientId"><div class="mb-4"><label for="clientName" class="text-sm font-bold text-gray-700 tracking-wide">Nome</label><input type="text" id="clientName" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="clientNif" class="text-sm font-bold text-gray-700 tracking-wide">NIF</label><input type="text" id="clientNif" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="clientAddress" class="text-sm font-bold text-gray-700 tracking-wide">Morada</label><input type="text" id="clientAddress" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="clientContact" class="text-sm font-bold text-gray-700 tracking-wide">Contacto</label><input type="text" id="clientContact" placeholder="email@exemplo.com" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="pt-4 flex justify-end"><button type="button" id="clientModalCancel" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2 hover:bg-gray-300 transition duration-300">Cancelar</button><button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Guardar</button></div></form></div></div></div>
+
+    <!-- Modal para Adicionar/Editar Fornecedor -->
+    <div id="supplierModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="supplierModalTitle" class="text-2xl font-bold">Adicionar Fornecedor</p><div id="supplierModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><form id="supplierForm"><input type="hidden" id="supplierId"><div class="mb-4"><label for="supplierName" class="text-sm font-bold text-gray-700 tracking-wide">Nome</label><input type="text" id="supplierName" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="supplierNif" class="text-sm font-bold text-gray-700 tracking-wide">NIF</label><input type="text" id="supplierNif" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="supplierAddress" class="text-sm font-bold text-gray-700 tracking-wide">Morada</label><input type="text" id="supplierAddress" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="supplierContact" class="text-sm font-bold text-gray-700 tracking-wide">Contacto</label><input type="text" id="supplierContact" placeholder="email@exemplo.com" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="pt-4 flex justify-end"><button type="button" id="supplierModalCancel" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2 hover:bg-gray-300 transition duration-300">Cancelar</button><button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Guardar</button></div></form></div></div></div>
+
+    <!-- Modal para Adicionar/Editar Máquina -->
+    <div id="machineModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="machineModalTitle" class="text-2xl font-bold">Adicionar Máquina</p><div id="machineModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><form id="machineForm"><input type="hidden" id="machineId"><div class="mb-4"><label for="machineTipo" class="text-sm font-bold text-gray-700 tracking-wide">Tipo</label><input type="text" id="machineTipo" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="machineMarca" class="text-sm font-bold text-gray-700 tracking-wide">Marca</label><input type="text" id="machineMarca" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="machineModelo" class="text-sm font-bold text-gray-700 tracking-wide">Modelo</label><input type="text" id="machineModelo" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required></div><div class="mb-4"><label for="machineEstado" class="text-sm font-bold text-gray-700 tracking-wide">Estado</label><select id="machineEstado" class="w-full text-base py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500" required><option value="Disponível">Disponível</option><option value="Vendido">Vendido</option><option value="Em Manutenção">Em Manutenção</option></select></div><div class="pt-4 flex justify-end"><button type="button" id="machineModalCancel" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg mr-2 hover:bg-gray-300 transition duration-300">Cancelar</button><button type="submit" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Guardar</button></div></form></div></div></div>
 
     <!-- Modal para Assistente IA -->
     <div id="aiModal" class="modal pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center opacity-0"><div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div><div class="modal-container bg-white w-11/12 md:max-w-2xl mx-auto rounded-xl shadow-lg z-50 overflow-y-auto"><div class="modal-content py-4 text-left px-6"><div class="flex justify-between items-center pb-3"><p id="aiModalTitle" class="text-2xl font-bold flex items-center"></p><div id="aiModalClose" class="cursor-pointer z-50"><svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path></svg></div></div><div class="prose max-w-none text-gray-800"><div id="aiLoading" class="flex flex-col items-center justify-center h-48"><div class="spinner w-12 h-12 rounded-full border-4 border-gray-200"></div><p id="aiLoadingText" class="mt-4 text-gray-600">A processar...</p></div><div id="aiResult" class="hidden"><textarea id="aiText" rows="15" class="w-full p-3 border rounded-md bg-gray-50 font-mono text-sm shadow-inner"></textarea><div id="copyFeedback" class="text-sm text-green-600 h-4 mt-1 font-medium"></div></div></div><div class="pt-4 flex justify-end"><button id="copyAiBtn" class="hidden bg-green-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" /><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" /></svg>Copiar Texto</button></div></div></div></div>
@@ -168,8 +214,21 @@
             { "id": 4, "prazo": "2024-12-10", "machineType": "Torno CNC", "cliente": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "zip": "2430-527", "comercial": "Joao Chanoca", "description": "Torno CNC com Y de boa qualidade" },
         ];
         let clientsData = [
-            {"id": 1, "nome": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "nif": "503883390", "morada": "Rua da Indústria, Lote 10", "contacto": "geral@tecnifreza.pt"},
-            {"id": 2, "nome": "Leomavél - Moldes, Lda", "nif": "502393301", "morada": "Zona Industrial Casal da Lebre", "contacto": "compras@leomavel.pt"},
+            {"id": 1, "nome": "TECNIFREZA - INDÚSTRIA DE MOLDES, S.A.", "nif": "503883390", "morada": "Rua da Indústria, Lote 10, Marinha Grande", "contacto": "geral@tecnifreza.pt"},
+            {"id": 2, "nome": "Leomavél - Moldes, Lda", "nif": "502393301", "morada": "Zona Industrial Casal da Lebre, Marinha Grande", "contacto": "compras@leomavel.pt"},
+            {"id": 3, "nome": "Roberto Pereira, Lda", "nif": "501987654", "morada": "Avenida dos Descobrimentos, 500, Oliveira de Azeméis", "contacto": "info@robertopereira.pt"},
+            {"id": 4, "nome": "FUTRIFER SA", "nif": "500123456", "morada": "Parque Industrial de Águeda", "contacto": "futrifer@mail.pt"},
+            {"id": 5, "nome": "Moldes RP", "nif": "508123456", "morada": "Zona Industrial, Lote 15, Marinha Grande", "contacto": "comercial@moldesrp.pt"},
+            {"id": 6, "nome": "Injec-Thor Plásticos, Lda", "nif": "509876543", "morada": "Rua da Inovação, 23, Leiria", "contacto": "info@injecthor.pt"},
+            {"id": 7, "nome": "Precisão Absoluta, S.A.", "nif": "507654321", "morada": "Parque Industrial de Oliveira de Azeméis", "contacto": "geral@precisaoabsoluta.com"}
+        ];
+        let suppliersData = [
+            {"id": 1, "nome": "Heidenhain GmbH", "nif": "DE123456789", "morada": "Dr.-Johannes-Heidenhain-Str. 5, 83301 Traunreut, Alemanha", "contacto": "info@heidenhain.de"},
+            {"id": 2, "nome": "Fanuc Corporation", "nif": "JP987654321", "morada": "Oshino-mura, Yamanashi Prefecture, Japão", "contacto": "contact@fanuc.co.jp"},
+        ];
+        let machinesData = [
+            {"id": 1, "tipo": "Torno CNC", "marca": "DMG Mori", "modelo": "NLX 2500", "estado": "Disponível"},
+            {"id": 2, "tipo": "Centro de Maquinação", "marca": "Haas", "modelo": "VF-2", "estado": "Vendido"},
         ];
 
         // --- ESTADO DA APLICAÇÃO ---
@@ -186,8 +245,12 @@
         // Abas
         const tabOpportunities = document.getElementById('tab-opportunities');
         const tabClients = document.getElementById('tab-clients');
+        const tabSuppliers = document.getElementById('tab-suppliers');
+        const tabMachines = document.getElementById('tab-machines');
         const contentOpportunities = document.getElementById('content-opportunities');
         const contentClients = document.getElementById('content-clients');
+        const contentSuppliers = document.getElementById('content-suppliers');
+        const contentMachines = document.getElementById('content-machines');
         const addBtn = document.getElementById('addBtn');
         const addBtnText = document.getElementById('addBtnText');
         const machineTypeFilter = document.getElementById('machineTypeFilter');
@@ -196,13 +259,19 @@
         // Tabelas
         const opportunitiesTableBody = document.getElementById('opportunitiesTableBody');
         const clientsTableBody = document.getElementById('clientsTableBody');
+        const suppliersTableBody = document.getElementById('suppliersTableBody');
+        const machinesTableBody = document.getElementById('machinesTableBody');
         
         // Modais e Formulários
         const opportunityModal = document.getElementById('opportunityModal');
         const clientModal = document.getElementById('clientModal');
+        const supplierModal = document.getElementById('supplierModal');
+        const machineModal = document.getElementById('machineModal');
         const aiModal = document.getElementById('aiModal');
         const opportunityForm = document.getElementById('opportunityForm');
         const clientForm = document.getElementById('clientForm');
+        const supplierForm = document.getElementById('supplierForm');
+        const machineForm = document.getElementById('machineForm');
 
         // --- LÓGICA DE ATUALIZAÇÃO ---
         function showToast(message, showSpinner = false) {
@@ -224,21 +293,20 @@
                          { "id": 11, "prazo": "2025-01-20", "machineType": "Outro", "cliente": "FUTRIFER SA", "zip": "3750-142", "comercial": "Joao Chanoca", "description": "Engenho radial lança 1,5m + mesa" },
                     ];
                     const newClients = [
-                        {"id": 3, "nome": "Roberto Pereira, Lda", "nif": "501987654", "morada": "Avenida dos Descobrimentos, 500", "contacto": "info@robertopereira.pt"},
-                        {"id": 4, "nome": "FUTRIFER SA", "nif": "500123456", "morada": "Parque Industrial de Águeda", "contacto": "futrifer@mail.pt"},
+                        {"id": 8, "nome": "GLN FAMOLDE", "nif": "501112233", "morada": "Parque Industrial da Marinha Grande", "contacto": "gln@gln.pt"},
+                        {"id": 9, "nome": "AM Moldes Lda", "nif": "503456789", "morada": "Rua dos Plásticos, 45, Marinha Grande", "contacto": "geral@ammoldes.pt"},
+                    ];
+                    const newSuppliers = [
+                        {"id": 3, "nome": "Siemens AG", "nif": "DE129274208", "morada": "Werner-von-Siemens-Straße 1, 80333 München, Alemanha", "contacto": "support@siemens.com"},
+                    ];
+                    const newMachines = [
+                        {"id": 3, "tipo": "Retificadora", "marca": "Favretto", "modelo": "RTF 150", "estado": "Em Manutenção"},
                     ];
 
-                    newOpportunities.forEach(newOpp => {
-                        if (!opportunitiesData.some(opp => opp.id === newOpp.id)) {
-                            opportunitiesData.push(newOpp);
-                        }
-                    });
-
-                    newClients.forEach(newClient => {
-                        if (!clientsData.some(cli => cli.id === newClient.id)) {
-                            clientsData.push(newClient);
-                        }
-                    });
+                    newOpportunities.forEach(newOpp => { if (!opportunitiesData.some(opp => opp.id === newOpp.id)) opportunitiesData.push(newOpp); });
+                    newClients.forEach(newClient => { if (!clientsData.some(cli => cli.id === newClient.id)) clientsData.push(newClient); });
+                    newSuppliers.forEach(newSupplier => { if (!suppliersData.some(sup => sup.id === newSupplier.id)) suppliersData.push(newSupplier); });
+                    newMachines.forEach(newMachine => { if (!machinesData.some(mac => mac.id === newMachine.id)) machinesData.push(newMachine); });
                     
                     resolve();
                 }, 2000); // Simula 2 segundos de espera
@@ -249,27 +317,29 @@
         // --- LÓGICA DAS ABAS ---
         function switchTab(tab) {
             activeTab = tab;
-            if (tab === 'opportunities') {
-                tabOpportunities.classList.add('active');
-                tabClients.classList.remove('active');
-                contentOpportunities.classList.remove('hidden');
-                contentClients.classList.add('hidden');
-                machineTypeFilter.classList.remove('hidden');
-                summarizeBtn.classList.remove('hidden');
-                addBtnText.textContent = "Adicionar";
-                searchInput.placeholder = "Pesquisar oportunidades...";
-                renderOpportunitiesTable();
-            } else {
-                tabClients.classList.add('active');
-                tabOpportunities.classList.remove('active');
-                contentClients.classList.remove('hidden');
-                contentOpportunities.classList.add('hidden');
-                machineTypeFilter.classList.add('hidden');
-                summarizeBtn.classList.add('hidden');
-                addBtnText.textContent = "Adicionar";
-                searchInput.placeholder = "Pesquisar clientes...";
-                renderClientsTable();
+            searchInput.value = '';
+
+            const tabs = {
+                opportunities: { btn: tabOpportunities, content: contentOpportunities },
+                clients: { btn: tabClients, content: contentClients },
+                suppliers: { btn: tabSuppliers, content: contentSuppliers },
+                machines: { btn: tabMachines, content: contentMachines }
+            };
+
+            for (const key in tabs) {
+                const isActive = key === tab;
+                tabs[key].btn.classList.toggle('active', isActive);
+                tabs[key].content.classList.toggle('hidden', !isActive);
             }
+
+            const isOpportunities = tab === 'opportunities';
+            machineTypeFilter.classList.toggle('hidden', !isOpportunities);
+            summarizeBtn.classList.toggle('hidden', !isOpportunities);
+
+            if (tab === 'opportunities') { searchInput.placeholder = "Pesquisar oportunidades..."; renderOpportunitiesTable(); } 
+            else if (tab === 'clients') { searchInput.placeholder = "Pesquisar clientes..."; renderClientsTable(); } 
+            else if (tab === 'suppliers') { searchInput.placeholder = "Pesquisar fornecedores..."; renderSuppliersTable(); }
+            else if (tab === 'machines') { searchInput.placeholder = "Pesquisar máquinas..."; renderMachinesTable(); }
         }
 
         // --- LÓGICA DE RENDERIZAÇÃO ---
@@ -280,7 +350,6 @@
                 (selectedMachineType ? item.machineType === selectedMachineType : true) &&
                 Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm))
             );
-            // Sorting logic here...
             opportunitiesTableBody.innerHTML = '';
             noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
             filteredData.forEach(item => {
@@ -302,10 +371,7 @@
         
         function renderClientsTable() {
             const searchTerm = searchInput.value.toLowerCase();
-            let filteredData = clientsData.filter(item => 
-                Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm))
-            );
-            // Sorting logic here...
+            let filteredData = clientsData.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm)));
             clientsTableBody.innerHTML = '';
             noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
              filteredData.forEach(item => {
@@ -317,6 +383,44 @@
                     <td class="p-4 text-center"><div class="flex items-center justify-center gap-3">
                         <button class="edit-btn text-gray-500 hover:text-gray-800" title="Editar" data-id="${item.id}" data-type="client"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
                         <button class="delete-btn text-red-600 hover:text-red-900" title="Remover" data-id="${item.id}" data-type="client"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button>
+                    </div></td>`;
+            });
+        }
+
+        function renderSuppliersTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            let filteredData = suppliersData.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm)));
+            suppliersTableBody.innerHTML = '';
+            noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
+             filteredData.forEach(item => {
+                const row = suppliersTableBody.insertRow();
+                row.className = 'bg-white border-b border-gray-200 hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-4 font-medium text-gray-900">${item.id}</td><td class="p-4">${item.nome}</td>
+                    <td class="p-4">${item.nif}</td><td class="p-4">${item.morada}</td><td class="p-4">${item.contacto}</td>
+                    <td class="p-4 text-center"><div class="flex items-center justify-center gap-3">
+                        <button class="edit-btn text-gray-500 hover:text-gray-800" title="Editar" data-id="${item.id}" data-type="supplier"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
+                        <button class="delete-btn text-red-600 hover:text-red-900" title="Remover" data-id="${item.id}" data-type="supplier"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button>
+                    </div></td>`;
+            });
+        }
+        
+        function renderMachinesTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            let filteredData = machinesData.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm)));
+            machinesTableBody.innerHTML = '';
+            noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
+             filteredData.forEach(item => {
+                const row = machinesTableBody.insertRow();
+                const statusColor = item.estado === 'Disponível' ? 'bg-green-100 text-green-800' : item.estado === 'Vendido' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800';
+                row.className = 'bg-white border-b border-gray-200 hover:bg-gray-50';
+                row.innerHTML = `
+                    <td class="p-4 font-medium text-gray-900">${item.id}</td><td class="p-4">${item.tipo}</td>
+                    <td class="p-4">${item.marca}</td><td class="p-4">${item.modelo}</td>
+                    <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${item.estado}</span></td>
+                    <td class="p-4 text-center"><div class="flex items-center justify-center gap-3">
+                        <button class="edit-btn text-gray-500 hover:text-gray-800" title="Editar" data-id="${item.id}" data-type="machine"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg></button>
+                        <button class="delete-btn text-red-600 hover:text-red-900" title="Remover" data-id="${item.id}" data-type="machine"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg></button>
                     </div></td>`;
             });
         }
@@ -350,9 +454,6 @@
                         renderOpportunitiesTable();
                     }
                  }
-                if (button.classList.contains('generate-email-btn')) { /* ... chamar IA para email ... */ }
-                if (button.classList.contains('suggest-steps-btn')) { /* ... chamar IA para passos ... */ }
-
             } else if (type === 'client') {
                  const client = clientsData.find(item => item.id == id);
                  if (button.classList.contains('edit-btn')) {
@@ -370,6 +471,40 @@
                          renderClientsTable();
                      }
                  }
+            } else if (type === 'supplier') {
+                 const supplier = suppliersData.find(item => item.id == id);
+                 if (button.classList.contains('edit-btn')) {
+                     document.getElementById('supplierModalTitle').textContent = "Editar Fornecedor";
+                     document.getElementById('supplierId').value = supplier.id;
+                     document.getElementById('supplierName').value = supplier.nome;
+                     document.getElementById('supplierNif').value = supplier.nif;
+                     document.getElementById('supplierAddress').value = supplier.morada;
+                     document.getElementById('supplierContact').value = supplier.contacto;
+                     openModal(supplierModal);
+                 }
+                 if (button.classList.contains('delete-btn')) {
+                     if (confirm(`Tem a certeza que deseja remover o fornecedor ${supplier.nome}?`)) {
+                         suppliersData = suppliersData.filter(s => s.id != id);
+                         renderSuppliersTable();
+                     }
+                 }
+            } else if (type === 'machine') {
+                 const machine = machinesData.find(item => item.id == id);
+                 if (button.classList.contains('edit-btn')) {
+                     document.getElementById('machineModalTitle').textContent = "Editar Máquina";
+                     document.getElementById('machineId').value = machine.id;
+                     document.getElementById('machineTipo').value = machine.tipo;
+                     document.getElementById('machineMarca').value = machine.marca;
+                     document.getElementById('machineModelo').value = machine.modelo;
+                     document.getElementById('machineEstado').value = machine.estado;
+                     openModal(machineModal);
+                 }
+                 if (button.classList.contains('delete-btn')) {
+                     if (confirm(`Tem a certeza que deseja remover a máquina ${machine.marca} ${machine.modelo}?`)) {
+                         machinesData = machinesData.filter(m => m.id != id);
+                         renderMachinesTable();
+                     }
+                 }
             }
         }
         
@@ -383,23 +518,36 @@
             // Abas
             tabOpportunities.addEventListener('click', () => switchTab('opportunities'));
             tabClients.addEventListener('click', () => switchTab('clients'));
+            tabSuppliers.addEventListener('click', () => switchTab('suppliers'));
+            tabMachines.addEventListener('click', () => switchTab('machines'));
             
             // Pesquisa e filtros
-            searchInput.addEventListener('input', () => activeTab === 'opportunities' ? renderOpportunitiesTable() : renderClientsTable());
+            searchInput.addEventListener('input', () => {
+                if (activeTab === 'opportunities') renderOpportunitiesTable();
+                else if (activeTab === 'clients') renderClientsTable();
+                else if (activeTab === 'suppliers') renderSuppliersTable();
+                else if (activeTab === 'machines') renderMachinesTable();
+            });
             machineTypeFilter.addEventListener('change', renderOpportunitiesTable);
             
             // Botões principais
             addBtn.addEventListener('click', () => {
                 if (activeTab === 'opportunities') {
-                    opportunityForm.reset();
-                    document.getElementById('opportunityId').value = '';
+                    opportunityForm.reset(); document.getElementById('opportunityId').value = '';
                     document.getElementById('opportunityModalTitle').textContent = "Adicionar Oportunidade";
                     openModal(opportunityModal);
-                } else {
-                    clientForm.reset();
-                    document.getElementById('clientId').value = '';
+                } else if (activeTab === 'clients') {
+                    clientForm.reset(); document.getElementById('clientId').value = '';
                     document.getElementById('clientModalTitle').textContent = "Adicionar Cliente";
                     openModal(clientModal);
+                } else if (activeTab === 'suppliers') {
+                    supplierForm.reset(); document.getElementById('supplierId').value = '';
+                    document.getElementById('supplierModalTitle').textContent = "Adicionar Fornecedor";
+                    openModal(supplierModal);
+                } else if (activeTab === 'machines') {
+                    machineForm.reset(); document.getElementById('machineId').value = '';
+                    document.getElementById('machineModalTitle').textContent = "Adicionar Máquina";
+                    openModal(machineModal);
                 }
             });
 
@@ -407,28 +555,36 @@
             document.getElementById('tab-content').addEventListener('click', handleTableActions);
             
             // Modais
-            opportunityModal.addEventListener('click', (e) => { if(e.target.classList.contains('modal-overlay') || e.target.closest('#opportunityModalClose') || e.target.closest('#opportunityModalCancel')) closeModal(opportunityModal); });
-            clientModal.addEventListener('click', (e) => { if(e.target.classList.contains('modal-overlay') || e.target.closest('#clientModalClose') || e.target.closest('#clientModalCancel')) closeModal(clientModal); });
-            aiModal.addEventListener('click', (e) => { if(e.target.classList.contains('modal-overlay') || e.target.closest('#aiModalClose')) closeModal(aiModal); });
-            
+            const setupModalClosers = (modalId, closeIds) => {
+                const modal = document.getElementById(modalId);
+                modal.addEventListener('click', (e) => {
+                    const isCloseButton = closeIds.some(id => e.target.closest(id));
+                    if(isCloseButton || e.target.classList.contains('modal-overlay')) {
+                        closeModal(modal);
+                    }
+                });
+            };
+            setupModalClosers('opportunityModal', ['#opportunityModalClose', '#opportunityModalCancel']);
+            setupModalClosers('clientModal', ['#clientModalClose', '#clientModalCancel']);
+            setupModalClosers('supplierModal', ['#supplierModalClose', '#supplierModalCancel']);
+            setupModalClosers('machineModal', ['#machineModalClose', '#machineModalCancel']);
+            setupModalClosers('aiModal', ['#aiModalClose']);
+
             // Submissão de Formulários
             opportunityForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const id = document.getElementById('opportunityId').value;
-                const newOpp = {
-                    prazo: document.getElementById('prazo').value,
-                    machineType: document.getElementById('machineType').value,
-                    cliente: document.getElementById('cliente').value,
-                    zip: document.getElementById('zip').value,
-                    comercial: document.getElementById('comercial').value,
-                    description: document.getElementById('description').value,
+                const record = {
+                    prazo: document.getElementById('prazo').value, machineType: document.getElementById('machineType').value,
+                    cliente: document.getElementById('cliente').value, zip: document.getElementById('zip').value,
+                    comercial: document.getElementById('comercial').value, description: document.getElementById('description').value,
                 };
                 if(id){
                     const index = opportunitiesData.findIndex(o => o.id == id);
-                    opportunitiesData[index] = { ...opportunitiesData[index], ...newOpp };
+                    opportunitiesData[index] = { ...opportunitiesData[index], ...record };
                 } else {
-                    newOpp.id = Math.max(...opportunitiesData.map(o => o.id)) + 1;
-                    opportunitiesData.push(newOpp);
+                    record.id = opportunitiesData.length > 0 ? Math.max(...opportunitiesData.map(o => o.id)) + 1 : 1;
+                    opportunitiesData.push(record);
                 }
                 renderOpportunitiesTable();
                 closeModal(opportunityModal);
@@ -437,21 +593,55 @@
              clientForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const id = document.getElementById('clientId').value;
-                const newClient = {
-                    nome: document.getElementById('clientName').value,
-                    nif: document.getElementById('clientNif').value,
-                    morada: document.getElementById('clientAddress').value,
-                    contacto: document.getElementById('clientContact').value,
+                const record = {
+                    nome: document.getElementById('clientName').value, nif: document.getElementById('clientNif').value,
+                    morada: document.getElementById('clientAddress').value, contacto: document.getElementById('clientContact').value,
                 };
                 if(id){
                     const index = clientsData.findIndex(c => c.id == id);
-                    clientsData[index] = { ...clientsData[index], ...newClient };
+                    clientsData[index] = { ...clientsData[index], ...record };
                 } else {
-                    newClient.id = Math.max(...clientsData.map(c => c.id)) + 1;
-                    clientsData.push(newClient);
+                    record.id = clientsData.length > 0 ? Math.max(...clientsData.map(c => c.id)) + 1 : 1;
+                    clientsData.push(record);
                 }
                 renderClientsTable();
                 closeModal(clientModal);
+            });
+
+            supplierForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('supplierId').value;
+                const record = {
+                    nome: document.getElementById('supplierName').value, nif: document.getElementById('supplierNif').value,
+                    morada: document.getElementById('supplierAddress').value, contacto: document.getElementById('supplierContact').value,
+                };
+                if(id){
+                    const index = suppliersData.findIndex(s => s.id == id);
+                    suppliersData[index] = { ...suppliersData[index], ...record };
+                } else {
+                    record.id = suppliersData.length > 0 ? Math.max(...suppliersData.map(s => s.id)) + 1 : 1;
+                    suppliersData.push(record);
+                }
+                renderSuppliersTable();
+                closeModal(supplierModal);
+            });
+
+             machineForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('machineId').value;
+                const record = {
+                    tipo: document.getElementById('machineTipo').value, marca: document.getElementById('machineMarca').value,
+                    modelo: document.getElementById('machineModelo').value, estado: document.getElementById('machineEstado').value,
+                };
+                if(id){
+                    const index = machinesData.findIndex(m => m.id == id);
+                    machinesData[index] = { ...machinesData[index], ...record };
+                } else {
+                    record.id = machinesData.length > 0 ? Math.max(...machinesData.map(m => m.id)) + 1 : 1;
+                    machinesData.push(record);
+                }
+                renderMachinesTable();
+                closeModal(machineModal);
             });
 
             switchTab('opportunities'); // Iniciar na aba de oportunidades
