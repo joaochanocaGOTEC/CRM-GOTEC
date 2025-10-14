@@ -1,0 +1,2 @@
+# tabela-oportunidades
+Oportunidades GOTEC
