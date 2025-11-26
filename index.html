@@ -107,12 +107,12 @@
                         <table class="w-full text-sm text-left text-gray-600">
                             <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
                                 <tr>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="prazo">Prazo Resposta</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="machineType">Machine Type</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="cliente">Cliente</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="comercial">Comercial</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="description">Descrição</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id" data-label="ID">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="prazo" data-label="Prazo Resposta">Prazo Resposta</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="machineType" data-label="Machine Type">Machine Type</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="cliente" data-label="Cliente">Cliente</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="comercial" data-label="Comercial">Comercial</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="description" data-label="Descrição">Descrição</th>
                                     <th scope="col" class="p-4 text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -127,11 +127,11 @@
                         <table class="w-full text-sm text-left text-gray-600">
                             <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
                                 <tr>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nome">Nome</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nif">NIF</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="morada">Morada</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="contacto">Contacto</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id" data-label="ID">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nome" data-label="Nome">Nome</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nif" data-label="NIF">NIF</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="morada" data-label="Morada">Morada</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="contacto" data-label="Contacto">Contacto</th>
                                     <th scope="col" class="p-4 text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -146,11 +146,11 @@
                         <table class="w-full text-sm text-left text-gray-600">
                             <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
                                 <tr>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nome">Nome</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nif">NIF</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="morada">Morada</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="contacto">Contacto</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id" data-label="ID">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nome" data-label="Nome">Nome</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="nif" data-label="NIF">NIF</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="morada" data-label="Morada">Morada</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="contacto" data-label="Contacto">Contacto</th>
                                     <th scope="col" class="p-4 text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -165,11 +165,11 @@
                         <table class="w-full text-sm text-left text-gray-600">
                             <thead class="bg-gray-100 text-gray-700 uppercase tracking-wider">
                                 <tr>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id">ID</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="tipo">Tipo</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="marca">Marca</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="modelo">Modelo</th>
-                                    <th scope="col" class="p-4 cursor-pointer" data-sort="estado">Estado</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="id" data-label="ID">ID</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="tipo" data-label="Tipo">Tipo</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="marca" data-label="Marca">Marca</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="modelo" data-label="Modelo">Modelo</th>
+                                    <th scope="col" class="p-4 cursor-pointer" data-sort="estado" data-label="Estado">Estado</th>
                                     <th scope="col" class="p-4 text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -273,6 +273,45 @@
         const supplierForm = document.getElementById('supplierForm');
         const machineForm = document.getElementById('machineForm');
 
+        // --- UTILITÁRIOS ---
+        function applySorting(data) {
+            const sortedData = [...data];
+
+            const compare = (a, b) => {
+                let valA = a[currentSort.column];
+                let valB = b[currentSort.column];
+
+                const isDate = /^\d{4}-\d{2}-\d{2}$/.test(valA) && /^\d{4}-\d{2}-\d{2}$/.test(valB);
+                const isNumber = !isNaN(valA) && !isNaN(valB);
+
+                if (isDate) {
+                    valA = new Date(valA);
+                    valB = new Date(valB);
+                } else if (isNumber) {
+                    valA = Number(valA);
+                    valB = Number(valB);
+                } else {
+                    valA = String(valA).toLowerCase();
+                    valB = String(valB).toLowerCase();
+                }
+
+                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            };
+
+            return sortedData.sort(compare);
+        }
+
+        function updateSortIndicators() {
+            headers.forEach(header => {
+                const baseLabel = header.dataset.label || header.textContent.trim();
+                const isActive = header.dataset.sort === currentSort.column;
+                const indicator = isActive ? (currentSort.direction === 'asc' ? '▲' : '▼') : '';
+                header.textContent = `${baseLabel} ${indicator}`.trim();
+            });
+        }
+
         // --- LÓGICA DE ATUALIZAÇÃO ---
         function showToast(message, showSpinner = false) {
             toastMessage.textContent = message;
@@ -336,6 +375,8 @@
             machineTypeFilter.classList.toggle('hidden', !isOpportunities);
             summarizeBtn.classList.toggle('hidden', !isOpportunities);
 
+            updateSortIndicators();
+
             if (tab === 'opportunities') { searchInput.placeholder = "Pesquisar oportunidades..."; renderOpportunitiesTable(); } 
             else if (tab === 'clients') { searchInput.placeholder = "Pesquisar clientes..."; renderClientsTable(); } 
             else if (tab === 'suppliers') { searchInput.placeholder = "Pesquisar fornecedores..."; renderSuppliersTable(); }
@@ -346,10 +387,11 @@
         function renderOpportunitiesTable() {
             const searchTerm = searchInput.value.toLowerCase();
             const selectedMachineType = machineTypeFilter.value;
-            let filteredData = opportunitiesData.filter(item => 
+            let filteredData = opportunitiesData.filter(item =>
                 (selectedMachineType ? item.machineType === selectedMachineType : true) &&
                 Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm))
             );
+            filteredData = applySorting(filteredData);
             opportunitiesTableBody.innerHTML = '';
             noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
             filteredData.forEach(item => {
@@ -372,6 +414,7 @@
         function renderClientsTable() {
             const searchTerm = searchInput.value.toLowerCase();
             let filteredData = clientsData.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm)));
+            filteredData = applySorting(filteredData);
             clientsTableBody.innerHTML = '';
             noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
              filteredData.forEach(item => {
@@ -390,6 +433,7 @@
         function renderSuppliersTable() {
             const searchTerm = searchInput.value.toLowerCase();
             let filteredData = suppliersData.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm)));
+            filteredData = applySorting(filteredData);
             suppliersTableBody.innerHTML = '';
             noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
              filteredData.forEach(item => {
@@ -408,6 +452,7 @@
         function renderMachinesTable() {
             const searchTerm = searchInput.value.toLowerCase();
             let filteredData = machinesData.filter(item => Object.values(item).some(val => String(val).toLowerCase().includes(searchTerm)));
+            filteredData = applySorting(filteredData);
             machinesTableBody.innerHTML = '';
             noResultsDiv.classList.toggle('hidden', filteredData.length > 0);
              filteredData.forEach(item => {
@@ -529,7 +574,25 @@
                 else if (activeTab === 'machines') renderMachinesTable();
             });
             machineTypeFilter.addEventListener('change', renderOpportunitiesTable);
-            
+
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    const column = header.dataset.sort;
+                    if (currentSort.column === column) {
+                        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSort = { column, direction: 'asc' };
+                    }
+
+                    if (activeTab === 'opportunities') renderOpportunitiesTable();
+                    else if (activeTab === 'clients') renderClientsTable();
+                    else if (activeTab === 'suppliers') renderSuppliersTable();
+                    else if (activeTab === 'machines') renderMachinesTable();
+
+                    updateSortIndicators();
+                });
+            });
+
             // Botões principais
             addBtn.addEventListener('click', () => {
                 if (activeTab === 'opportunities') {
