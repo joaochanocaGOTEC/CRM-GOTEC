@@ -1,0 +1,46 @@
+<section class="space-y-4">
+  <div class="bg-white rounded-xl shadow-sm p-4">
+    <h2 id="detalhe-empresa" class="text-xl font-semibold"></h2>
+    <p class="text-sm text-slate-500">Contacto: <span id="detalhe-contacto"></span></p>
+    <p class="text-sm text-slate-500">Email: <span id="detalhe-email"></span></p>
+    <p class="text-sm text-slate-500">Telefone: <span id="detalhe-telefone"></span></p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm p-4 space-y-2">
+    <p class="text-sm text-slate-500">Problema identificado</p>
+    <p id="detalhe-problema" class="text-base"></p>
+    <p class="text-sm text-slate-500">Solução proposta</p>
+    <p id="detalhe-solucao" class="text-base"></p>
+    <p class="text-sm text-slate-500">Valor</p>
+    <p id="detalhe-valor" class="text-lg font-semibold"></p>
+    <p class="text-sm text-slate-500">Próxima ação</p>
+    <p id="detalhe-proxima" class="text-base"></p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <a id="action-call" class="p-3 rounded-lg bg-slate-900 text-white text-center">📞 Ligar</a>
+    <a id="action-email" class="p-3 rounded-lg bg-slate-900 text-white text-center">✉️ Email</a>
+    <button id="action-atividade" class="p-3 rounded-lg bg-slate-100 text-slate-900">➕ Registar atividade</button>
+    <a id="action-proposta" class="p-3 rounded-lg bg-slate-100 text-slate-900 text-center">📄 Abrir proposta</a>
+  </div>
+
+  <div id="activity-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-lg p-4 w-full max-w-md">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Registar atividade</h3>
+        <button id="activity-close" class="text-slate-500">✖</button>
+      </div>
+      <form id="activity-form" class="space-y-3 mt-4">
+        <select name="tipo" class="w-full p-3 rounded-lg border border-slate-200">
+          <option value="chamada">Chamada</option>
+          <option value="email">Email</option>
+          <option value="visita">Visita</option>
+        </select>
+        <input name="resumo" type="text" placeholder="Resumo" class="w-full p-3 rounded-lg border border-slate-200" required />
+        <input name="proximo_passo" type="text" placeholder="Próximo passo" class="w-full p-3 rounded-lg border border-slate-200" />
+        <input name="data_followup" type="date" class="w-full p-3 rounded-lg border border-slate-200" />
+        <button type="submit" class="w-full p-3 rounded-lg bg-slate-900 text-white">Guardar atividade</button>
+      </form>
+    </div>
+  </div>
+</section>
