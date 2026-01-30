@@ -233,7 +233,12 @@
 
         // --- ESTADO DA APLICAÇÃO ---
         let activeTab = 'opportunities';
-        let currentSort = { column: 'id', direction: 'asc' };
+        const sortState = {
+            opportunities: { column: 'id', direction: 'asc' },
+            clients: { column: 'id', direction: 'asc' },
+            suppliers: { column: 'id', direction: 'asc' },
+            machines: { column: 'id', direction: 'asc' }
+        };
 
         // --- ELEMENTOS DO DOM ---
         const searchInput = document.getElementById('searchInput');
@@ -274,12 +279,21 @@
         const machineForm = document.getElementById('machineForm');
 
         // --- UTILITÁRIOS ---
+        function getSortConfig(tab = activeTab) {
+            return sortState[tab];
+        }
+
+        function getActiveHeaders() {
+            return document.querySelectorAll(`#content-${activeTab} th[data-sort]`);
+        }
+
         function applySorting(data) {
             const sortedData = [...data];
+            const { column, direction } = getSortConfig();
 
             const compare = (a, b) => {
-                let valA = a[currentSort.column];
-                let valB = b[currentSort.column];
+                let valA = a[column];
+                let valB = b[column];
 
                 const isDate = /^\d{4}-\d{2}-\d{2}$/.test(valA) && /^\d{4}-\d{2}-\d{2}$/.test(valB);
                 const isNumber = !isNaN(valA) && !isNaN(valB);
@@ -295,8 +309,8 @@
                     valB = String(valB).toLowerCase();
                 }
 
-                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
-                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                if (valA < valB) return direction === 'asc' ? -1 : 1;
+                if (valA > valB) return direction === 'asc' ? 1 : -1;
                 return 0;
             };
 
@@ -304,10 +318,12 @@
         }
 
         function updateSortIndicators() {
-            headers.forEach(header => {
+            const activeHeaders = getActiveHeaders();
+            const { column, direction } = getSortConfig();
+            activeHeaders.forEach(header => {
                 const baseLabel = header.dataset.label || header.textContent.trim();
-                const isActive = header.dataset.sort === currentSort.column;
-                const indicator = isActive ? (currentSort.direction === 'asc' ? '▲' : '▼') : '';
+                const isActive = header.dataset.sort === column;
+                const indicator = isActive ? (direction === 'asc' ? '▲' : '▼') : '';
                 header.textContent = `${baseLabel} ${indicator}`.trim();
             });
         }
@@ -578,18 +594,21 @@
             headers.forEach(header => {
                 header.addEventListener('click', () => {
                     const column = header.dataset.sort;
+                    const tab = header.closest('[id^="content-"]').id.replace('content-', '');
+                    const currentSort = getSortConfig(tab);
+
                     if (currentSort.column === column) {
                         currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                     } else {
-                        currentSort = { column, direction: 'asc' };
+                        sortState[tab] = { column, direction: 'asc' };
                     }
 
-                    if (activeTab === 'opportunities') renderOpportunitiesTable();
-                    else if (activeTab === 'clients') renderClientsTable();
-                    else if (activeTab === 'suppliers') renderSuppliersTable();
-                    else if (activeTab === 'machines') renderMachinesTable();
+                    if (tab === 'opportunities') renderOpportunitiesTable();
+                    else if (tab === 'clients') renderClientsTable();
+                    else if (tab === 'suppliers') renderSuppliersTable();
+                    else if (tab === 'machines') renderMachinesTable();
 
-                    updateSortIndicators();
+                    if (tab === activeTab) updateSortIndicators();
                 });
             });
 
